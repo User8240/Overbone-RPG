@@ -10,20 +10,13 @@ export const storeState = (initialState) => {
   };
 };
 
-const skeletonState = (Skeleton) => {
-  let currentState = Skeleton; 
-  return (dogHitSkeleton = state => state) => {
-    const newSkeletonState = dogHitSkeleton(currentState);
-    currentState = {...newSkeletonState};
-    return newSkeletonState;
-  }
-}
+
 
 // const stateControl = storeState();
-// const skeletonState = storeState(Skeleton);
+export const skeletonState = storeState(Skeleton);
 // skeletonState();
 
-const dogHitSkeleton = attackSkeleton("Strength")("Health")("Dog")
+
 
 export const attackSkeleton = (enemyProp) => {
   return (playerProp) => {
@@ -37,6 +30,8 @@ export const attackSkeleton = (enemyProp) => {
   };
 };
 
+export const dogHitSkeleton = attackSkeleton("Strength")("Health")(Dog)
+
 export const dogState = storeState(Dog);
 
 export const changeState = (prop) => {
@@ -47,6 +42,10 @@ export const changeState = (prop) => {
     });
   };
 };
+const addBone = changeState("Bone")(5);
+
+skeletonState(addBone);
+dogState(boneAttack);
 
 export const attackEnemy = (playerProp) => {
   return (playerState) => {
@@ -61,15 +60,61 @@ export const attackEnemy = (playerProp) => {
 };
 
 const attackFunction = (propToDecrease) =>{
-  return (stateTo)
+  return (propToDecreaseBy) => {
+    return (stateAttacking) => {
+      return (stateBeingAttacked) => ({
+        ...stateBeingAttacked,
+        [propToDecrease]: (stateBeingAttacked[propToDecrease]) - (stateAttacking[propToDecreaseBy])
+      });
+    };
+  };
+};
+
+const addItemFunction = (itemProp) =>{
+  return (newItem) => {
+    return (playerState) ({
+      ...playerState,
+      [itemProp]: ([Item || "" ]).concat(newItem)
+    });
+  }
+}
+const addItemAbilities = (...Inventory) =>{
+  return (playerProp) => {
+    return (item) => {
+      return(value) => {
+        return(playerState) => {
+  // Object.Assign(Inventory).includes();
+  if (...Inventory.includes('Potion' || Item)) {
+    ...playerState,
+    [playerProp] (playerState[playerProp] || 0) + value
+  }
+}
+      }
+    }
+  }
 }
 
+let currentStateOfDogState = initialState;
+dogState(
+boneAttack(currentStateOfDogState) => ({
+  ...stateBeingAttacked,
+  [propToDecrease]: (currentStateOfDogState[propToDecrease]) - (stateAttacking[propToDecreaseBy])
+})
+);
+
+//attacking function that decreases health by strength 
+const attacking = attackFunction("Health")("Strength");
+const boneAttack = attackFunction("Health")("Bone")(Skeleton);
+
+//skeletonAttacksEnemy takes the state of skeleton to then be passed into dogState() to attack dog 
+const skeletonAttacksEnemy = attacking("Skeleton")
+//same as above but for enemy takes the enemy state to then be passed into skeletonState() to attack skeleton
+const enemyAttacksSkeleton = attacking("Dog")
 
 
 
-
-const hitSkeleton = ("Strength")("Health");
-const newEnemyHitSkeleton = hitSkeleton("newEnemy");
+// const hitSkeleton = ("Strength")("Health");
+// const newEnemyHitSkeleton = hitSkeleton("newEnemy");
 //BELOW will increase the health by 2
 const boneRecharge = changeState("Health")(2);
 //skeletonState(boneRecharge);
@@ -80,7 +125,7 @@ const dogAttack = changeState("Health")(-2);
 
 export const skeletonAttack = attackEnemy('Strength')(Skeleton)
 ('Health');
-dogState(skeletonAttack);
+// dogState(skeletonAttack);
 
 // const throwBone = changeState("Bones")(-1);
 //enemyProp = Health
