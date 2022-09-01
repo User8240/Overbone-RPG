@@ -1,4 +1,3 @@
-
 const Skeleton = { Health: 1, Strength: 2 };
 const Dog = { Health: 1, Strength: 2 };
 
@@ -11,8 +10,33 @@ export const storeState = (initialState) => {
   };
 };
 
-const stateControl = storeState();
-const skeletonState = storeState(Skeleton);
+const skeletonState = (Skeleton) => {
+  let currentState = Skeleton; 
+  return (dogHitSkeleton = state => state) => {
+    const newSkeletonState = dogHitSkeleton(currentState);
+    currentState = {...newSkeletonState};
+    return newSkeletonState;
+  }
+}
+
+// const stateControl = storeState();
+// const skeletonState = storeState(Skeleton);
+// skeletonState();
+
+const dogHitSkeleton = attackSkeleton("Strength")("Health")("Dog")
+
+export const attackSkeleton = (enemyProp) => {
+  return (playerProp) => {
+    return (enemyState) => {
+      return (playerState) => ({
+        ...playerState,
+        [playerProp]: (playerState[playerProp]) - (enemyState[enemyProp])//value might be playerState.Strength? - SGplayerStrength divided by defenseSG
+
+      });
+    };
+  };
+};
+
 export const dogState = storeState(Dog);
 
 export const changeState = (prop) => {
@@ -36,7 +60,16 @@ export const attackEnemy = (playerProp) => {
   };
 };
 
+const attackFunction = (propToDecrease) =>{
+  return (stateTo)
+}
 
+
+
+
+
+const hitSkeleton = ("Strength")("Health");
+const newEnemyHitSkeleton = hitSkeleton("newEnemy");
 //BELOW will increase the health by 2
 const boneRecharge = changeState("Health")(2);
 //skeletonState(boneRecharge);
